@@ -1,0 +1,550 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../s21_string.h"
+
+//test s21_sprintf
+
+
+//test s21_sprintf
+
+#test sprintf_1
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %d", 4);
+    s21_sprintf(str2, "Hello %d", 4);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_2
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %d %d", -4, 6);
+    s21_sprintf(str2, "Hello %d %d", -4, 6);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_3
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %c", 4);
+    s21_sprintf(str2, "Hello %c", 4);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_4
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %-c", 'd');
+    s21_sprintf(str2, "Hello %-c", 'd');
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_5
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %-d", 4);
+    s21_sprintf(str2, "Hello %-d", 4);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_6
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %-d", -4);
+    s21_sprintf(str2, "Hello %-d", -4);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_7
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %-i", -4);
+    s21_sprintf(str2, "Hello %-i", -4);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_8
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %i", -4);
+    s21_sprintf(str2, "Hello %i", -4);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_9
+   char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %% % 9.6i", 123);
+    s21_sprintf(str2, "Hello %% % 9.6i", 123);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_10
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %s", "world!");
+    s21_sprintf(str2, "Hello %s", "world!");
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_11
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %-5s", "world!");
+    s21_sprintf(str2, "Hello %-5s", "world!");
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_12
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %u", 25);
+    s21_sprintf(str2, "Hello %u", 25);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_13
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %u", -25);
+    s21_sprintf(str2, "Hello %u", -25);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_14
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello world!");
+    s21_sprintf(str2, "Hello world!");
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_15
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %.5i", -4);
+    s21_sprintf(str2, "Hello %.5i", -4);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_16
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %-9.6u", 25);
+    s21_sprintf(str2, "Hello %-9.6u", 25);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_17
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %-7.5i", -4);
+    s21_sprintf(str2, "Hello %-7.5i", -4);
+    ck_assert_str_eq(str1, str2);
+
+ #test sprintf_18
+  char buff1[100];
+  char buff2[100];
+
+  char *str = "%s Hello World!";
+  ck_assert_int_eq(sprintf(buff1, str, str), s21_sprintf(buff2, str, str));
+  ck_assert_str_eq(buff1, buff2);
+
+  str = "%c%c%c";
+  char char_param = '0';
+  ck_assert_int_eq(sprintf(buff1, str, char_param, char_param, char_param),
+                   s21_sprintf(buff2, str, char_param, char_param, char_param));
+  ck_assert_str_eq(buff1, buff2);
+
+  char_param = '\0';
+  ck_assert_int_eq(sprintf(buff1, str, char_param, char_param, char_param),
+                   s21_sprintf(buff2, str, char_param, char_param, char_param));
+  ck_assert_str_eq(buff1, buff2);
+
+  str = "%d%d%d";
+  int int_param = 0;
+  ck_assert_int_eq(sprintf(buff1, str, int_param, int_param, int_param),
+                   s21_sprintf(buff2, str, int_param, int_param, int_param));
+  ck_assert_str_eq(buff1, buff2);
+
+  int_param = -369696969;
+  ck_assert_int_eq(sprintf(buff1, str, int_param, int_param, int_param),
+                   s21_sprintf(buff2, str, int_param, int_param, int_param));
+  ck_assert_str_eq(buff1, buff2);
+
+  str = "%f";
+  for (float float_param = -123.5; float_param < -122.5; float_param += 0.001) {
+    int result1 = sprintf(buff1, str, float_param);
+    int result2 = s21_sprintf(buff2, str, float_param);
+    ck_assert_msg(result1 == result2, "s21_sprintf(buff1, \"%s\", %f) finished with %d, but expected %d", str,
+                  float_param, result2, result1);
+    ck_assert_str_eq(buff1, buff2);
+  }
+
+  str = "%s%s%s";
+  char *str_param = "Hello World!";
+  ck_assert_int_eq(sprintf(buff1, str, str_param, str_param, str_param),
+                   s21_sprintf(buff2, str, str_param, str_param, str_param));
+  ck_assert_str_eq(buff1, buff2);
+
+  ck_assert_int_eq(sprintf(buff1, str, NULL, NULL, NULL),
+                   s21_sprintf(buff2, str, s21_NULL, s21_NULL, s21_NULL));
+  ck_assert_str_eq(buff1, buff2);
+
+  str = "%u%u%u";
+  unsigned int uint_param = 345987;
+  ck_assert_int_eq(sprintf(buff1, str, uint_param, uint_param, uint_param),
+                   s21_sprintf(buff2, str, uint_param, uint_param, uint_param));
+  ck_assert_str_eq(buff1, buff2);
+
+  str = "%%%%%%%s";
+  ck_assert_int_eq(sprintf(buff1, str, str), s21_sprintf(buff2, str, str));
+  ck_assert_str_eq(buff1, buff2);
+
+
+
+ #test sprintf_19
+
+  char buff1[100];
+  char buff2[100];
+
+  char *str = "%+d%+d%+d";
+  for (int int_param = -50; int_param <= 50; int_param += 5) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%+i%+i%+i";
+  for (int int_param = -50; int_param <= 50; int_param += 5) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%+f%+f%+f";
+  for (float float_param = -50; float_param <= 50; float_param += 2.5) {
+    int result1 = sprintf(buff1, str, float_param, float_param, float_param),
+        result2 = s21_sprintf(buff2, str, float_param, float_param, float_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%+u%+u%+u";
+  for (unsigned int uint_param = 0; uint_param <= 100; uint_param += 1) {
+    int result1 = sprintf(buff1, str, uint_param, uint_param, uint_param),
+        result2 = s21_sprintf(buff2, str, uint_param, uint_param, uint_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%+c%+c%+c";
+  for (char char_param = '0'; char_param <= '9'; char_param += 1) {
+    int result1 = sprintf(buff1, str, char_param, char_param, char_param),
+        result2 = s21_sprintf(buff2, str, char_param, char_param, char_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+
+#test sprintf_20
+
+  char buff1[100];
+  char buff2[100];
+
+  char *str = "%-10d%-10d%-10d";
+  for (int int_param = -50; int_param <= 50; int_param += 5) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%-10i%-10i%-10i";
+  for (int int_param = -50; int_param <= 50; int_param += 5) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%-10f%-10f%-10f";
+  for (float float_param = -50; float_param <= 50; float_param += 2.5) {
+    int result1 = sprintf(buff1, str, float_param, float_param, float_param),
+        result2 = s21_sprintf(buff2, str, float_param, float_param, float_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%-10u%-10u%-10u";
+  for (unsigned int uint_param = 0; uint_param <= 100; uint_param += 1) {
+    int result1 = sprintf(buff1, str, uint_param, uint_param, uint_param),
+        result2 = s21_sprintf(buff2, str, uint_param, uint_param, uint_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%-10c%-10c%-10c";
+  for (char char_param = '0'; char_param <= '9'; char_param += 1) {
+    int result1 = sprintf(buff1, str, char_param, char_param, char_param),
+        result2 = s21_sprintf(buff2, str, char_param, char_param, char_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%-15s%-15s%-15s";
+  char *str_param = "Hello World!";
+  int result1 = sprintf(buff1, str, str_param, str_param, str_param),
+      result2 = s21_sprintf(buff2, str, str_param, str_param, str_param);
+  ck_assert_str_eq(buff1, buff2);
+  ck_assert_int_eq(result1, result2);
+
+
+
+  #test sprintf_21
+
+  char buff1[100];
+  char buff2[100];
+
+  char *str = "% +d% +d% +d";  // plus is ignored in space flag
+  for (int int_param = -50; int_param <= 50; int_param += 5) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "% +i% +i% +i";
+  for (int int_param = -50; int_param <= 50; int_param += 5) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "% +f% +f% +f";
+  for (float float_param = -50; float_param <= 50; float_param += 2.5) {
+    int result1 = sprintf(buff1, str, float_param, float_param, float_param),
+        result2 = s21_sprintf(buff2, str, float_param, float_param, float_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "% +u% +u% +u";
+  for (unsigned int uint_param = 0; uint_param <= 100; uint_param += 1) {
+    int result1 = sprintf(buff1, str, uint_param, uint_param, uint_param),
+        result2 = s21_sprintf(buff2, str, uint_param, uint_param, uint_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "% +c% +c% +c";
+  for (char char_param = '0'; char_param <= '9'; char_param += 1) {
+    int result1 = sprintf(buff1, str, char_param, char_param, char_param),
+        result2 = s21_sprintf(buff2, str, char_param, char_param, char_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+
+
+#test sprintf_22
+
+  char buff1[100];
+  char buff2[100];
+
+  char *str = "%0d%3d%6d";  // plus is ignored in space flag
+  for (int int_param = -5000; int_param <= 5000; int_param += 50) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%0i%3i%6i";
+  for (int int_param = -500; int_param <= 500; int_param += 50) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%0f%7f%14f";
+  for (float float_param = -500; float_param <= 500; float_param += 50.1) {
+    int result1 = sprintf(buff1, str, float_param, float_param, float_param),
+        result2 = s21_sprintf(buff2, str, float_param, float_param, float_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%1u%3u%6u";
+  for (unsigned int uint_param = 0; uint_param <= 10000; uint_param += 100) {
+    int result1 = sprintf(buff1, str, uint_param, uint_param, uint_param),
+        result2 = s21_sprintf(buff2, str, uint_param, uint_param, uint_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%1c%3c%6c";
+  for (char char_param = '0'; char_param <= '9'; char_param += 1) {
+    int result1 = sprintf(buff1, str, char_param, char_param, char_param),
+        result2 = s21_sprintf(buff2, str, char_param, char_param, char_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%1s%3s%6s";
+  {
+    char *str_param = "He";
+    int result1 = sprintf(buff1, str, str_param, str_param, str_param),
+        result2 = s21_sprintf(buff2, str, str_param, str_param, str_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+  {
+    char *str_param = "Hello World!";
+    int result1 = sprintf(buff1, str, str_param, str_param, str_param),
+        result2 = s21_sprintf(buff2, str, str_param, str_param, str_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+#test sprintf_23
+
+  char buff1[100];
+  char buff2[100];
+
+  char *str = "%.0d%.3d%.6d";  // plus is ignored in space flag
+  for (int int_param = -5000; int_param <= 5000; int_param += 50) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%.0i%.3i%.6i";
+  for (int int_param = -500; int_param <= 500; int_param += 50) {
+    int result1 = sprintf(buff1, str, int_param, int_param, int_param),
+        result2 = s21_sprintf(buff2, str, int_param, int_param, int_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+/*  str = "%.0f%.4f%.8f";
+  for (float float_param = -500; float_param <= 500; float_param += 2.25) {
+    int result1 = sprintf(buff1, str, float_param, float_param, float_param),
+        result2 = s21_sprintf(buff2, str, float_param, float_param, float_param);
+    ck_assert_msg(strcmp(buff1, buff2) == 0,
+                  "s21_sprintf(buff1, \"%s\", %.12f) finished with %s, but expected %s", str, float_param,
+                  buff2, buff1);
+    // ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  {
+    float float_param = -438.001953125000;
+    int result1 = sprintf(buff1, str, float_param, float_param, float_param),
+        result2 = s21_sprintf(buff2, str, float_param, float_param, float_param);
+    ck_assert_msg(strcmp(buff1, buff2) == 0,
+                  "s21_sprintf(buff1, \"%s\", %.12f) finished with %s, but expected %s", str, float_param,
+                  buff2, buff1);
+   // ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+*/
+  str = "%.0u%.3u%.6u";
+  for (unsigned int uint_param = 0; uint_param <= 10000; uint_param += 100) {
+    int result1 = sprintf(buff1, str, uint_param, uint_param, uint_param),
+        result2 = s21_sprintf(buff2, str, uint_param, uint_param, uint_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%.0c%.3c%.6c";
+  for (char char_param = '0'; char_param <= '9'; char_param += 1) {
+    int result1 = sprintf(buff1, str, char_param, char_param, char_param),
+        result2 = s21_sprintf(buff2, str, char_param, char_param, char_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+  str = "%.0s%.8s%.16s";
+  {
+    char *str_param = "He";
+    int result1 = sprintf(buff1, str, str_param, str_param, str_param),
+        result2 = s21_sprintf(buff2, str, str_param, str_param, str_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+  {
+    char *str_param = "Hello World!";
+    int result1 = sprintf(buff1, str, str_param, str_param, str_param),
+        result2 = s21_sprintf(buff2, str, str_param, str_param, str_param);
+    ck_assert_str_eq(buff1, buff2);
+    ck_assert_int_eq(result1, result2);
+  }
+
+
+#test sprintf_24
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "Hello %ld", 238230000006325000);
+    s21_sprintf(buff2, "Hello %ld", 238230000006325000);
+    ck_assert_str_eq(buff1, buff2);
+
+#test sprintf_25
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "Hello %ld", -238230000006325000);
+    s21_sprintf(buff2, "Hello %ld", -238230000006325000);
+    ck_assert_str_eq(buff1, buff2);
+
+#test sprintf_26
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "Hello %hd", 23);
+    s21_sprintf(buff2, "Hello %hd", 23);
+    ck_assert_str_eq(buff1, buff2);
+
+#test sprintf_27
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "Hello %hd", -23);
+    s21_sprintf(buff2, "Hello %hd", -23);
+    ck_assert_str_eq(buff1, buff2);
+
+#test sprintf_28
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %+-d", -4);
+    s21_sprintf(str2, "Hello %+-d", -4);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_29
+    char str1[256];
+    char str2[256];
+    sprintf(str1, "Hello %+-d\n%-d", -4, 6);
+    s21_sprintf(str2, "Hello %+-d\n%-d", -4, 6);
+    ck_assert_str_eq(str1, str2);
+
+#test sprintf_30
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "Hello %lli", (long long int)922337203685477580);
+    s21_sprintf(buff2, "Hello %lli",(long long int)922337203685477580);
+    ck_assert_str_eq(buff1, buff2);
+
+#test sprintf_31
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "Hello %hhu", -9);
+    s21_sprintf(buff2, "Hello %hhu",-9);
+    ck_assert_str_eq(buff1, buff2);
+
+#test sprintf_32
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "Hello %-.5d", 9);
+    s21_sprintf(buff2, "Hello %-.5d",9);
+    ck_assert_str_eq(buff1, buff2);
+
+#test sprintf_33
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "Hello %-.5d%c%s%0.6f", 9, 'a', "sky", 12.456);
+    s21_sprintf(buff2, "Hello %-.5d%c%s%0.6f", 9, 'a', "sky", 12.456);
+    ck_assert_str_eq(buff1, buff2);
+
+#test sprintf_34
+    char buff1[100];
+    char buff2[100];
+    sprintf(buff1, "%s", "Do not go gentle into that good night");
+    s21_sprintf(buff2, "%s", "Do not go gentle into that good night");
+    ck_assert_str_eq(buff1, buff2);
